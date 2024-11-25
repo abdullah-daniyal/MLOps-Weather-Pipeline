@@ -1,0 +1,6 @@
+[core]
+    remote = weatherpipleine
+['remote "weatherpipleine"']
+    url = gdrive://1-MoMoPFRVHowFjYtusTmm7qkEkAYvPoH
+    gdrive_client_id = 1098579676541-5gfgkuvb5uf44b9lur20k7096abfpfnk.apps.googleusercontent.com
+    gdrive_client_secret = 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
