@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Prediction App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Weather Prediction App</h1>
+
+    <div id="auth">
+        <h2>Sign Up</h2>
+        <input type="text" id="signup-username" placeholder="Username">
+        <input type="password" id="signup-password" placeholder="Password">
+        <button onclick="signup()">Sign Up</button>
+
+        <h2>Login</h2>
+        <input type="text" id="login-username" placeholder="Username">
+        <input type="password" id="login-password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="prediction" style="display:none;">
+        <h2>Get Temperature Prediction</h2>
+        <input type="number" id="humidity" placeholder="Humidity">
+        <input type="number" id="wind_speed" placeholder="Wind Speed">
+        <button onclick="predict()">Predict</button>
+        <p id="prediction-result"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
