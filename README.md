@@ -1,24 +1,36 @@
 # MLOps Weather Prediction Pipeline
 
-This repository implements a weather prediction pipeline using MLOps principles with tools like DVC, MLFlow, Airflow, Docker, Kubernetes, and CI/CD pipelines. The project aims to provide insights into the automation of data versioning, model training, and deployment processes.
+This project is a full-fledged MLOps pipeline for weather prediction, leveraging various tools to manage datasets, model versioning, automation, and deployment. The pipeline is designed to fetch weather data, preprocess it, train a model, and then deploy the model through a complete CI/CD pipeline.
 
 ## Project Overview
 
-### Objectives:
-1. Integrate DVC for managing datasets and machine learning models.
-2. Use MLFlow for model versioning and tracking metrics.
-3. Implement an automated pipeline using Airflow for data collection, preprocessing, and model training.
-4. Set up Git-based workflows for development, testing, and production.
-5. Deploy the model in a Kubernetes environment with Docker containers.
+The goal of this project is to provide students with hands-on experience in implementing MLOps practices using the following tools:
 
-### Key Components:
-- **Data Collection**: Weather data is fetched using an API and saved as CSV files.
-- **Data Preprocessing**: The collected data is cleaned, normalized, and saved as processed data.
-- **Model Training**: A linear regression model is trained to predict temperature based on features like humidity and wind speed.
-- **Airflow Pipelines**: Automate the end-to-end process of fetching data, preprocessing, training models, and monitoring.
-- **MLFlow Integration**: Track and version models, parameters, and metrics using MLFlow.
-- **Docker & Kubernetes**: Containerize the application and deploy it on Kubernetes.
-- **Git-based Branching Workflow**: Implement Git-based CI/CD pipelines for smooth development, testing, and production environments.
+- **DVC (Data Version Control)**: For versioning datasets and machine learning models.
+- **MLFlow**: For model versioning, logging, and management.
+- **Airflow**: For automating workflows and managing data pipelines.
+- **Docker**: For containerizing applications.
+- **Kubernetes**: For deployment in a scalable, containerized environment.
+- **Flask/FastAPI**: For building the REST API to serve predictions.
+
+The project includes:
+- Data collection from a weather API.
+- Data preprocessing and feature engineering.
+- Training a machine learning model for weather prediction.
+- Integration with MLFlow for model versioning and tracking.
+- Automating the workflow using Apache Airflow.
+- Deployment of the full-stack application on Kubernetes using Docker.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- Docker
+- Docker Compose
+- Python 3.8+
+- Apache Airflow
+- Minikube (for local Kubernetes cluster)
+- Git
 
 ## Project Structure
 
@@ -42,76 +54,176 @@ mlops-weather-pipeline/
 ├── README.md
 └── train_model.py
 ```
-Files Explanation:
-fetch_weather.py: Fetches real-time and historical weather data from an API.
-preprocess_data.py: Cleans and normalizes the weather data.
-train_model.py: Trains a linear regression model using the processed data.
-airflow/: Contains Airflow DAGs for automating the data pipeline.
-dvc.yaml: Defines the DVC pipeline for versioning the datasets and models.
-docker-compose.yml: Configures Docker containers for the application and Airflow.
-models/model.pkl.dvc: The serialized model file managed by DVC.
-Prerequisites
-Before running the project, ensure you have the following:
 
-Docker: For containerization and deployment.
-Kubernetes: For managing containers in a distributed environment.
-DVC: For versioning datasets and models.
-MLFlow: For model versioning and logging.
-Airflow: For automating workflows.
-Python 3.8+: For running the scripts.
+## Setup Instructions
 
-Installation
-1. Set Up the Environment
-Clone the repository:
+### Step 1: Clone the Repository
+
+First, clone the repository to your local machine.
+
+```bash
 git clone https://github.com/yourusername/mlops-weather-pipeline.git
 cd mlops-weather-pipeline
+```
 
-Create and activate a virtual environment:
-python -m venv venv
-source venv/bin/activate  # Linux/MacOS
-venv\Scripts\activate     # Windows
+### Step 2: Install Dependencies
 
-Install the dependencies:
-pip install -r requirements.txt
+1. **Install Python dependencies**:
+   
+   Create a virtual environment and install the required libraries:
 
-2. Set Up Docker & Kubernetes
-Use docker-compose.yml to set up Docker containers, including the Airflow setup.
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # For Linux/Mac
+   venv\Scripts\activate  # For Windows
+   pip install -r requirements.txt
+   ```
 
-Run Docker Compose to start the containers:
-docker-compose up --build
+2. **Install Docker**:
+   Make sure Docker is running on your machine. You can install it from [Docker's official site](https://www.docker.com/).
 
-3. DVC Setup
-Initialize DVC for managing data and models:
+3. **Install Apache Airflow**:
+   If Airflow isn't installed already, you can install it using:
+
+   ```bash
+   pip install apache-airflow
+   ```
+
+4. **Install DVC**:
+
+   DVC can be installed with pip:
+
+   ```bash
+   pip install dvc
+   ```
+
+### Step 3: Configure Environment Variables
+
+Create a `.env` file in the project root with your API key and any necessary environment variables:
+
+```env
+API_KEY=your_weather_api_key
+```
+
+### Step 4: Run Data Collection Script
+
+The `fetch_weather.py` script collects current and historical weather data, saving it as `raw_data.csv` in the `data/` folder.
+
+Run the script with:
+
+```bash
+python fetch_weather.py
+```
+
+### Step 5: Preprocess Data
+
+The `preprocess_data.py` script preprocesses the raw weather data by normalizing numerical values and handling missing data. It saves the processed data as `processed_data.csv`.
+
+Run the script with:
+
+```bash
+python preprocess_data.py
+```
+
+### Step 6: Train the Model
+
+The `train_model.py` script trains a Linear Regression model to predict temperature based on humidity and wind speed. It saves the trained model as `model.pkl`.
+
+Run the script with:
+
+```bash
+python train_model.py
+```
+
+### Step 7: DVC Versioning
+
+DVC is used for versioning the datasets and models. To set up DVC, initialize DVC and track the data files:
+
+```bash
 dvc init
+dvc add data/raw_data.csv
+dvc add data/processed_data.csv
+dvc add models/model.pkl
+git add .dvc .gitignore
+git commit -m "Add data and model files"
+```
 
-Push the data to DVC remote storage:
-dvc push
+### Step 8: Airflow Setup
 
-4. Airflow Setup
-Airflow is configured via Docker, and you can access the Airflow UI at http://localhost:8080. Make sure you have the appropriate DAGs and tasks set up for the data pipeline.
+Airflow is used to automate the data pipeline. You need to define Airflow DAGs to handle data collection, preprocessing, and model training.
 
-5. Running the Workflow
-To trigger the workflow, either use Airflow's UI or manually run the following scripts:
+1. **Define Airflow DAGs**:
+   Create a DAG file in `airflow/dags/` for each of the steps, i.e., data collection, preprocessing, and model training.
 
-fetch_weather.py: Fetches and saves raw weather data.
-preprocess_data.py: Preprocesses the data.
-train_model.py: Trains and saves the model.
-6. Deploy the Model with Kubernetes
-Use Minikube for local Kubernetes deployment. Set up the Kubernetes deployment configuration and deploy the application:
-kubectl apply -f k8s/deployment.yaml
+2. **Run Airflow**:
+   Start the Airflow web server and scheduler:
 
-7. CI/CD Pipelines
-Set up GitHub Actions for continuous integration and deployment:
+   ```bash
+   airflow webserver -p 8080
+   airflow scheduler
+   ```
 
-Dev Branch: Active development.
-Testing Branch: Runs automated tests and pushes Docker images.
-Prod Branch: Deploys the application to Kubernetes.
-Testing
-Unit tests for the API and model can be found in the tests/ folder. Run tests using:
-pytest
+   Access the Airflow UI at `http://localhost:8080`.
 
-Conclusion
-This project demonstrates a complete MLOps pipeline for weather prediction, with a focus on versioning, automation, and deployment. It integrates various tools like DVC, MLFlow, Airflow, Docker, and Kubernetes, following best practices for continuous integration and delivery.
+### Step 9: Docker Setup
 
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+Docker is used to containerize the application. Use the `docker-compose.yml` file to set up the services.
+
+```bash
+docker-compose up --build
+```
+
+### Step 10: Kubernetes Deployment
+
+Deploy the containerized application to Kubernetes. You can use Minikube for local deployment:
+
+1. **Start Minikube**:
+
+   ```bash
+   minikube start
+   ```
+
+2. **Deploy the Application**:
+
+   Apply Kubernetes deployment files:
+
+   ```bash
+   kubectl apply -f k8s/
+   ```
+
+3. **Access the Application**:
+   Get the Minikube IP and access the service:
+
+   ```bash
+   minikube service <service-name> --url
+   ```
+
+### Step 11: CI/CD Setup
+
+Use GitHub Actions or any CI/CD tool to automate the testing, building, and deployment process. This ensures that code changes trigger tests and deployments to the correct environments (Dev, Testing, and Production).
+
+### Step 12: Write the Blog
+
+In your Medium blog, document your MLOps workflow, the integration of tools like DVC, MLFlow, and Airflow, and the steps for automating model training and deployment.
+
+### Step 13: Monitoring and Model Versioning with MLFlow
+
+Integrate MLFlow to log models, metrics, and parameters. Use the model registry to manage different stages of the model (e.g., `staging`, `production`).
+
+### Step 14: Run Tests
+
+Ensure you have unit tests in place for your backend API (e.g., using `pytest` or `unittest`) to verify that predictions are working correctly.
+
+```bash
+pytest tests/test_api.py
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Conclusion
+
+This project integrates various tools and practices essential for MLOps, such as data versioning with DVC, model management with MLFlow, and workflow automation with Airflow. It also demonstrates how to deploy a machine learning model to production using Docker and Kubernetes, making it a complete pipeline suitable for real-world applications.
+
+
