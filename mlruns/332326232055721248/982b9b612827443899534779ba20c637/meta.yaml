@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/SmartCom/Desktop/mlopsproject/MLOps-Weather-Pipeline/mlruns/332326232055721248/982b9b612827443899534779ba20c637/artifacts
+end_time: 1733248657446
+entry_point_name: ''
+experiment_id: '332326232055721248'
+lifecycle_stage: active
+run_id: 982b9b612827443899534779ba20c637
+run_name: dazzling-crow-190
+run_uuid: 982b9b612827443899534779ba20c637
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1733248640801
+status: 3
+tags: []
+user_id: SmartCom

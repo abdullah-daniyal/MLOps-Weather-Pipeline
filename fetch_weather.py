@@ -3,7 +3,6 @@ import pandas as pd
 import os
 from datetime import datetime, timedelta
 
-
 API_KEY = '4e2eef88d2b44a9591974745242511'  
 CITY = 'Islamabad'  
 BASE_URL = 'http://api.weatherapi.com/v1'
@@ -68,8 +67,8 @@ def main():
     if current_weather:
         records.append(current_weather)
     
-    # Collect historical weather data for the past 4 days
-    for i in range(1, 5):
+    # Collect historical weather data for the past 30 days
+    for i in range(1, 31):
         date = datetime.utcnow() - timedelta(days=i)
         historical_weather = fetch_historical_weather(date)
         if historical_weather:

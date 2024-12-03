@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1733249365408
+current_stage: None
+description: null
+last_updated_timestamp: 1733249365408
+name: WeatherPredictor
+run_id: cf287a973f824203ad8dd0edd6f4e5cf
+run_link: null
+source: file:///C:/Users/SmartCom/Desktop/mlopsproject/MLOps-Weather-Pipeline/mlruns/332326232055721248/cf287a973f824203ad8dd0edd6f4e5cf/artifacts/sklearn-model
+status: READY
+status_message: null
+storage_location: file:///C:/Users/SmartCom/Desktop/mlopsproject/MLOps-Weather-Pipeline/mlruns/332326232055721248/cf287a973f824203ad8dd0edd6f4e5cf/artifacts/sklearn-model
+user_id: null
+version: 2
