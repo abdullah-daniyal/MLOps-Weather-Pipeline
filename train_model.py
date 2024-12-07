@@ -64,7 +64,7 @@ def train():
 
         # Save the model using MLflow
         os.makedirs('models', exist_ok=True)
-        model_path = 'models/model.pkl'
+        model_path = 'backend/model/model.pkl'
         joblib.dump(model, model_path)
         print(f"Model saved to {model_path}")
 
