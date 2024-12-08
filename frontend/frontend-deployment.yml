@@ -1,4 +1,3 @@
-# frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: i211132usman/mlops-weather-pipeline-frontend:latest
+        image: i211132usman/mlops-weather-pipeline-frontend:prod
         ports:
         - containerPort: 80
         env:
@@ -37,6 +36,13 @@ spec:
             port: 80
           initialDelaySeconds: 15
           periodSeconds: 20
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
