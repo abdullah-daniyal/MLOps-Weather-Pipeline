@@ -36,11 +36,11 @@ jobs:
           password: Usm@n2003
 
       - name: Pull Docker Image
-        run: docker pull i211132usman/mlops-weather-pipeline-backend:testing
+        run: docker pull i211132usman/mlops-weather-pipeline-backend:latest
 
       - name: Tag and Push Prod Image
         run: |
-          docker tag i211132usman/mlops-weather-pipeline-backend:testing i211132usman/mlops-weather-pipeline-backend:prod
+          docker tag i211132usman/mlops-weather-pipeline-backend:latest i211132usman/mlops-weather-pipeline-backend:prod
           docker push i211132usman/mlops-weather-pipeline-backend:prod
 
       - name: Deploy to Kubernetes
