@@ -26,9 +26,9 @@ def test_preprocess(setup_test_data):
     # Run preprocess
     preprocess()
 
-    assert os.path.exists("data/processed_data.csv"), "Processed data file not created"
+    assert os.path.exists("../data/processed_data.csv"), "Processed data file not created"
 
-    processed_df = pd.read_csv("data/processed_data.csv")
+    processed_df = pd.read_csv("../data/processed_data.csv")
     # Check shape and if columns exist
     assert processed_df.shape == (2, 4), "Processed data shape mismatch"  # Including 'Target' or other columns
     assert all(col in processed_df.columns for col in ["Temperature", "Humidity", "Wind Speed"])
