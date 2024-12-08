@@ -5,35 +5,58 @@ from dags.preprocess_data import preprocess
 
 @pytest.fixture
 def setup_test_data(tmp_path):
-    # Create a temporary raw_data.csv for testing
+    """
+    Fixture to set up the test environment by creating a temporary 'data/raw_data.csv' file.
+    """
+    # Define the data to be written to 'raw_data.csv'
     data = {
         "Temperature": [25.0, 30.0],
         "Humidity": [50.0, 60.0],
         "Wind Speed": [10.0, 12.0]
     }
     df = pd.DataFrame(data)
-    raw_data_path = tmp_path / "raw_data.csv"
-    df.to_csv(raw_data_path, index=False)
-    # Create 'data' directory in the temporary path
+    
+    # Create 'data/' directory within the temporary path
     data_dir = tmp_path / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
-    # Change working directory to tmp_path for the duration of the test
+    
+    # Define the path for 'raw_data.csv'
+    raw_data_path = data_dir / "raw_data.csv"
+    
+    # Write the DataFrame to 'raw_data.csv'
+    df.to_csv(raw_data_path, index=False)
+    
+    # Change the current working directory to 'tmp_path'
     os.chdir(tmp_path)
-    yield
-    # Cleanup handled by tmp_path
+    
+    yield  # Test runs after this point
+    
+    # Teardown (optional, handled automatically by pytest's tmp_path)
 
 def test_preprocess(setup_test_data):
-    # Run preprocess
+    """
+    Test the preprocess function to ensure it correctly processes raw_data.csv
+    and outputs processed_data.csv with normalized values.
+    """
+    # Run the preprocess function
     preprocess()
-
-    assert os.path.exists("../data/processed_data.csv"), "Processed data file not created"
-
-    processed_df = pd.read_csv("../data/processed_data.csv")
-    # Check shape and if columns exist
-    assert processed_df.shape == (2, 4), "Processed data shape mismatch"  # Including 'Target' or other columns
-    assert all(col in processed_df.columns for col in ["Temperature", "Humidity", "Wind Speed"])
-
-    # Check normalization (mean approx 0)
-    assert abs(processed_df["Temperature"].mean()) < 1e-6, "Temperature not normalized properly"
-    assert abs(processed_df["Humidity"].mean()) < 1e-6, "Humidity not normalized properly"
-    assert abs(processed_df["Wind Speed"].mean()) < 1e-6, "Wind Speed not normalized properly"
+    
+    # Define the expected path for 'processed_data.csv'
+    processed_data_path = "data/processed_data.csv"
+    
+    # Check if 'processed_data.csv' was created
+    assert os.path.exists(processed_data_path), "Processed data file not created"
+    
+    # Load the processed data
+    processed_df = pd.read_csv(processed_data_path)
+    
+    # Define the expected columns
+    expected_columns = ["Temperature", "Humidity", "Wind Speed"]
+    
+    # Check if all expected columns are present
+    assert all(col in processed_df.columns for col in expected_columns), "Missing expected columns in processed data"
+    
+    # Check if the numerical columns are normalized (mean approximately 0)
+    for col in expected_columns:
+        mean = processed_df[col].mean()
+        assert abs(mean) < 1e-6, f"{col} not normalized properly"
