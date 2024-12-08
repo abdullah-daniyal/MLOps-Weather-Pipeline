@@ -27,7 +27,7 @@ def train():
         return
 
     # Define features and target
-    X = df[['Humidity', 'Wind Speed']]  # Predict Temperature based on Humidity and Wind Speed
+    X = df[['Humidity', 'Wind Speed']]
     y = df['Temperature']
 
     # Split the data
@@ -62,20 +62,22 @@ def train():
         # Log metrics
         mlflow.log_metric("r2_score", score)
 
-        # Save the model using MLflow
-        os.makedirs('models', exist_ok=True)
+        # Ensure backend/model directory exists
+        os.makedirs('backend/model', exist_ok=True)
         model_path = 'backend/model/model.pkl'
+
+        # Save model using joblib
         joblib.dump(model, model_path)
         print(f"Model saved to {model_path}")
 
         # Log the model artifact
         mlflow.log_artifact(model_path)
 
-        # Register the model
+        # Note: Removed model registry call since the file URI backend doesn't support it
+        # Just log the model to MLflow as an artifact
         mlflow.sklearn.log_model(
             sk_model=model,
-            artifact_path="sklearn-model",
-            registered_model_name="WeatherPredictor"
+            artifact_path="sklearn-model"
         )
 
 if __name__ == '__main__':
