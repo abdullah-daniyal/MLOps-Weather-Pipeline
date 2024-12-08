@@ -1,24 +1,20 @@
-# Use an official Node.js runtime as the base image
+# Use the official Node.js 18 Alpine image as the base
 FROM node:18-alpine
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Install dependencies
+# Install production dependencies
 RUN npm install --production
 
-# Copy the rest of the application code
+# Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose the port the app runs on
+# Expose the port your application runs on
 EXPOSE 5000
 
-# Define environment variable for production
-ENV NODE_ENV=production
-
-# Start the application
-CMD ["npm", "start"]
-
+# Define the command to run your application
+CMD ["node", "server.js"]

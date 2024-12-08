@@ -37,7 +37,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t i211132usman/mlops-weather-pipeline-backend:latest -f backend/Dockerfile.backend .
+          docker build -t i211132usman/mlops-weather-pipeline-backend:latest -f backend/Dockerfile.backend backend/
 
       - name: Push Docker Image
         run: |
