@@ -11,23 +11,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Install Minikube, kubectl, and set up environment
-      - name: Set up K8s environment
+      - name: Install kubectl and Minikube
         run: |
           sudo apt-get update -y
           sudo apt-get install -y apt-transport-https ca-certificates curl
-          sudo curl -fsSLo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.20.0/bin/linux/amd64/kubectl
-          sudo chmod +x /usr/local/bin/kubectl
+
+          # Install kubectl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
           # Install Minikube
           curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
           sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
-          # Start Minikube
+          # Start Minikube with Docker driver
           minikube start --driver=docker
 
           # Wait for Minikube to be ready
           kubectl get nodes
+
+      - name: Create Namespace
+        run: |
+          kubectl create namespace mlops-weather-pipeline || echo "Namespace already exists"
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -45,8 +50,7 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          # Assuming backend-deployment.yaml and frontend-deployment.yaml are updated and present
           kubectl apply -f backend/backend-deployment.yaml -n mlops-weather-pipeline
           kubectl apply -f frontend/frontend-deployment.yaml -n mlops-weather-pipeline
           # Optionally re-apply ingress if needed
-          # kubectl apply -f frontend-ingress.yaml -n mlops-weather-pipeline
+          # kubectl apply -f frontend/frontend-ingress.yaml -n mlops-weather-pipeline

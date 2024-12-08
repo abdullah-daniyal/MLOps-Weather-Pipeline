@@ -1,4 +1,3 @@
-# backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: i211132usman/mlops-weather-pipeline-backend:latest
+        image: i211132usman/mlops-weather-pipeline-backend:prod
         ports:
         - containerPort: 5000
         env:
@@ -25,7 +24,7 @@ spec:
         - name: PORT
           value: "5000"
         - name: MONGODB_URI
-          value: "mongodb://username:password@192.168.49.2:27017/user"  # Replace with your actual MongoDB URI
+          value: "mongodb+srv://i211187:yGEVq4tM8VsV1Yd5@practice.zmkukrt.mongodb.net/?retryWrites=true&w=majority&appName=Practice"  # Replace with your actual MongoDB URI
         - name: MLFLOW_TRACKING_URI
           value: "http://backend:5000"
         # Add other environment variables as needed
@@ -63,5 +62,3 @@ spec:
       name: http
   selector:
     app: backend
-
-backend deployment
