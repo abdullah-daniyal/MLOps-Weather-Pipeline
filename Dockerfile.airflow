@@ -1,0 +1,33 @@
+# Use the official Apache Airflow image as the base
+FROM apache/airflow:2.5.1
+
+# Switch to root to install dependencies
+USER root
+
+# Install any additional system dependencies if needed
+# Uncomment and modify the following lines if you need to install system packages
+# RUN apt-get update && apt-get install -y \
+#     <your-system-dependencies> \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Copy Airflow DAGs, plugins, and other necessary files
+COPY dags /opt/airflow/dags
+
+# (Optional) Copy any additional scripts or files
+# COPY scripts /opt/airflow/scripts
+
+# Ensure proper permissions
+RUN chown -R airflow: /opt/airflow
+
+# Switch back to airflow user
+USER airflow
+
+# (Optional) Set environment variables if needed
+# ENV AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+
+# Entrypoint and CMD are inherited from the base image
