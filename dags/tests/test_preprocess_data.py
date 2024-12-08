@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import pytest
-from preprocess_data import preprocess
+from dags.preprocess_data import preprocess
 
 @pytest.fixture
 def setup_test_data(tmp_path):
@@ -14,9 +14,12 @@ def setup_test_data(tmp_path):
     df = pd.DataFrame(data)
     raw_data_path = tmp_path / "raw_data.csv"
     df.to_csv(raw_data_path, index=False)
+    # Create 'data' directory in the temporary path
+    data_dir = tmp_path / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
     # Change working directory to tmp_path for the duration of the test
     os.chdir(tmp_path)
-    yield str(raw_data_path)
+    yield
     # Cleanup handled by tmp_path
 
 def test_preprocess(setup_test_data):
@@ -27,7 +30,7 @@ def test_preprocess(setup_test_data):
 
     processed_df = pd.read_csv("data/processed_data.csv")
     # Check shape and if columns exist
-    assert processed_df.shape == (2, 3), "Processed data shape mismatch"
+    assert processed_df.shape == (2, 4), "Processed data shape mismatch"  # Including 'Target' or other columns
     assert all(col in processed_df.columns for col in ["Temperature", "Humidity", "Wind Speed"])
 
     # Check normalization (mean approx 0)

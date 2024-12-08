@@ -1,7 +1,7 @@
 import os
 import pytest
 from unittest.mock import patch
-from fetch_weather import fetch_current_weather, fetch_historical_weather
+from dags.fetch_weather import fetch_current_weather, fetch_historical_weather
 
 # Sample data to mock API responses
 sample_current_weather = {
@@ -32,7 +32,7 @@ sample_historical_weather = {
     }
 }
 
-@patch('fetch_weather.requests.get')
+@patch('dags.fetch_weather.requests.get')
 def test_fetch_current_weather(mock_get):
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = sample_current_weather
@@ -48,7 +48,7 @@ def test_fetch_current_weather(mock_get):
 
     mock_get.assert_called_once()
 
-@patch('fetch_weather.requests.get')
+@patch('dags.fetch_weather.requests.get')
 def test_fetch_historical_weather(mock_get):
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = sample_historical_weather
