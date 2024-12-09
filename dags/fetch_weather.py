@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from datetime import datetime, timedelta
 
-API_KEY = '4e2eef88d2b44a9591974745242511'  
+API_KEY = '154c05f9cb2b4da880855739240912'  
 CITY = 'Islamabad'  
 BASE_URL = 'http://api.weatherapi.com/v1'
 
